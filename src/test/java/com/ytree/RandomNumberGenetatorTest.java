@@ -2,6 +2,7 @@ package com.ytree;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -61,18 +62,24 @@ public class RandomNumberGenetatorTest {
     public void testNextNumWithInvalidProbabilitiesList() {
         int[] randomNums = { -1, 0, 1, 2, 3 };
         float[] probabilities = { 0.01f, 0.3f };
-        RandomGen generator = new RandomGen(randomNums, probabilities);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {new RandomGen(randomNums, probabilities);});
+        String expectedMessage = String.format(
+                            "Unable to generate a random number. The list of numbers provided is lenghth: %d and the list of probablities is length: %d",
+                            randomNums.length, probabilities.length);
+        String actualMessage = exception.getMessage();
 
-        assertThrows(IllegalStateException.class, generator::nextNum);
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
     public void testNextNumWithInvalidProbabilitiesTotal() {
         int[] randomNums = { -1, 0, 1, 2, 3 };
         float[] probabilities = { 0.01f, 0.3f, 0.58f, 0.1f, 1.01f };
-        RandomGen generator = new RandomGen(randomNums, probabilities);
 
-        assertThrows(IllegalStateException.class, generator::nextNum);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {new RandomGen(randomNums, probabilities);});
+        String expectedMessage = "Unable to generate a random number. The list of probablities provided does not sum to 1";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
-
 }

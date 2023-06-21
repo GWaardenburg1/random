@@ -14,6 +14,7 @@ public class RandomGen {
         this.randomNums = randomNums;
         this.probabilities = probablities;
         random = new Random();
+        validateSeedData();
     }
 
     /**
@@ -22,7 +23,6 @@ public class RandomGen {
      * numbers roughly with the initialized probabilities.
      */
     public int nextNum() {
-        validateSeedData();
         float randomValue = random.nextFloat();
         float cumulativeProbability = 0.00f;
         for (int i = 0; i < probabilities.length; i++) {
